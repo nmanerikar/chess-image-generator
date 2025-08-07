@@ -34,6 +34,7 @@ const { col2n, drawArrow } = require("./arrow");
 function ChessImageGenerator(options = {}) {
   this.chess = new Chess();
   this.highlightedSquares = [];
+  this.arrows = [];
 
   this.size = options.size || defaultSize;
   this.padding = options.padding || defaultPadding;

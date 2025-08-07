@@ -6,7 +6,7 @@ const imageGenerator = new ChessImageGenerator({
   light: "#ccc",
   dark: "#aaa",
   highlight: "#ff0000",
-  //flipped: true,
+  flipped: true,
 });
 
 imageGenerator.highlightSquares(["a1", "b4"]);
