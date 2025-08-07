@@ -7,10 +7,6 @@
   "scripts": {
     "test": "node ./test.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andyruwruw/chessimage.git"
-  },
   "keywords": [
     "Chess",
     "GIF",
@@ -25,7 +21,7 @@
   },
   "homepage": "https://github.com/andyruwruw/chessimage#readme",
   "dependencies": {
-    "canvas": "^2.6.1",
+    "canvas": "^2.11.2",
     "canvas-to-buffer": "^1.1.0",
     "chess.js": "^0.10.2",
     "fs": "0.0.1-security",

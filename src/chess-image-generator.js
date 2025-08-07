@@ -16,6 +16,7 @@ const {
   defaultStyle,
   filePaths,
 } = require("./config/index");
+const { col2n, drawArrow } = require("./arrow");
 /**
  *
  * @typedef {object} Options
@@ -33,6 +34,7 @@ const {
 function ChessImageGenerator(options = {}) {
   this.chess = new Chess();
   this.highlightedSquares = [];
+  this.arrows = [];
 
   this.size = options.size || defaultSize;
   this.padding = options.padding || defaultPadding;
@@ -68,6 +70,10 @@ ChessImageGenerator.prototype = {
     } else {
       this.ready = true;
     }
+  },
+
+  addArrows(arrows) {
+    this.arrows = arrows;
   },
 
   /**
@@ -110,16 +116,24 @@ ChessImageGenerator.prototype = {
       throw new Error("Load a position first");
     }
 
-    const canvas = createCanvas(this.size + this.padding[1] + this.padding[3], this.size + this.padding[0] + this.padding[2]);
+    const canvas = createCanvas(
+      this.size + this.padding[1] + this.padding[3],
+      this.size + this.padding[0] + this.padding[2]
+    );
     const ctx = canvas.getContext("2d");
 
     ctx.beginPath();
-    ctx.rect(0, 0, this.size + this.padding[1] + this.padding[3], this.size + this.padding[0] + this.padding[2]);
+    ctx.rect(
+      0,
+      0,
+      this.size + this.padding[1] + this.padding[3],
+      this.size + this.padding[0] + this.padding[2]
+    );
     ctx.fillStyle = this.light;
     ctx.fill();
 
-    const row = this.flipped ? r => r + 1 : r => 7 - r + 1;
-    const col = this.flipped ? c => c : c => 7 - c;
+    const row = this.flipped ? (r) => r + 1 : (r) => 7 - r + 1;
+    const col = this.flipped ? (c) => c : (c) => 7 - c;
 
     for (let i = 0; i < 8; i += 1) {
       for (let j = 0; j < 8; j += 1) {
@@ -128,8 +142,8 @@ ChessImageGenerator.prototype = {
         if ((i + j) % 2 === 0) {
           ctx.beginPath();
           ctx.rect(
-            ((this.size / 8) * (7 - j + 1) - this.size / 8) + this.padding[3],
-            ((this.size / 8) * i) + this.padding[0],
+            (this.size / 8) * (7 - j + 1) - this.size / 8 + this.padding[3],
+            (this.size / 8) * i + this.padding[0],
             this.size / 8,
             this.size / 8
           );
@@ -140,8 +154,8 @@ ChessImageGenerator.prototype = {
         if (this.highlightedSquares.includes(coords)) {
           ctx.beginPath();
           ctx.rect(
-            ((this.size / 8) * (7 - j + 1) - this.size / 8) + this.padding[3],
-            ((this.size / 8) * i) + this.padding[0],
+            (this.size / 8) * (7 - j + 1) - this.size / 8 + this.padding[3],
+            (this.size / 8) * i + this.padding[0],
             this.size / 8,
             this.size / 8
           );
@@ -162,14 +176,34 @@ ChessImageGenerator.prototype = {
           const imageFile = await loadImage(path.join(__dirname, image));
           await ctx.drawImage(
             imageFile,
-            ((this.size / 8) * (7 - j + 1) - this.size / 8) + this.padding[3],
-            ((this.size / 8) * i) + this.padding[0],
+            (this.size / 8) * (7 - j + 1) - this.size / 8 + this.padding[3],
+            (this.size / 8) * i + this.padding[0],
             this.size / 8,
             this.size / 8
           );
         }
       }
     }
+
+    const sq = this.size / 8;
+    const rc2xy = (a) => a * sq - sq / 2;
+
+    this.arrows.forEach((arrow) => {
+      const fromR = row(arrow.from[1] - 1);
+      const fromC = 8 - col(col2n[arrow.from[0]]);
+      const toR = row(arrow.to[1] - 1);
+      const toC = 8 - col(col2n[arrow.to[0]]);
+
+      drawArrow(
+        ctx,
+        rc2xy(fromC) + this.padding[3],
+        rc2xy(fromR) + this.padding[0],
+        rc2xy(toC) + this.padding[3],
+        rc2xy(toR) + this.padding[0],
+        sq / 10,
+        arrow.color
+      );
+    });
 
     const frame = new Frame(canvas, {
       image: {
