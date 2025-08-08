@@ -43,6 +43,7 @@ function ChessImageGenerator(options = {}) {
   this.highlight = options.highlight || defaultHighlight;
   this.style = options.style || defaultStyle;
   this.flipped = options.flipped || false;
+  this.autoFlip = options.autoFlip || false;
 
   this.ready = false;
 }
@@ -56,6 +57,9 @@ ChessImageGenerator.prototype = {
     if (!this.chess.load_pgn(pgn)) {
       throw new Error("PGN could not be read successfully");
     } else {
+      if (this.autoFlip) {
+        this.flipped = this.chess.turn() === "b";
+      }
       this.ready = true;
     }
   },
@@ -68,6 +72,9 @@ ChessImageGenerator.prototype = {
     if (!this.chess.load(fen)) {
       throw new Error("FEN could not be read successfully");
     } else {
+      if (this.autoFlip) {
+        this.flipped = this.chess.turn() === "b";
+      }
       this.ready = true;
     }
   },
@@ -95,6 +102,9 @@ ChessImageGenerator.prototype = {
           );
         }
       }
+    }
+    if (this.autoFlip) {
+      this.flipped = this.chess.turn() === "b";
     }
     this.ready = true;
   },
