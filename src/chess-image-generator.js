@@ -210,7 +210,7 @@ ChessImageGenerator.prototype = {
         rc2xy(fromR) + this.padding[0],
         rc2xy(toC) + this.padding[3],
         rc2xy(toR) + this.padding[0],
-        sq / 10,
+        sq * 0.15,
         arrow.color
       );
     });
