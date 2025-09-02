@@ -83,6 +83,14 @@ ChessImageGenerator.prototype = {
     this.arrows = arrows;
   },
 
+  flipToBlack() {
+    this.flipped = true;
+  },
+
+  flipToWhite() {
+    this.flipped = false;
+  },
+
   /**
    * Loads position array into chess.js object
    * @param {string[][]} array Chess position array
