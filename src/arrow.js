@@ -14,7 +14,7 @@ const col2n = {
 //
 function drawArrow(ctx, fromx, fromy, tox, toy, arrowWidth, color) {
   //variables to be used when creating the arrow
-  var headlen = 30;
+  var headlen = 20;
   var angle = Math.atan2(toy - fromy, tox - fromx);
 
   ctx.save();

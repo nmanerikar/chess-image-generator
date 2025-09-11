@@ -83,6 +83,14 @@ ChessImageGenerator.prototype = {
     this.arrows = arrows;
   },
 
+  flipToBlack() {
+    this.flipped = true;
+  },
+
+  flipToWhite() {
+    this.flipped = false;
+  },
+
   /**
    * Loads position array into chess.js object
    * @param {string[][]} array Chess position array
@@ -210,7 +218,7 @@ ChessImageGenerator.prototype = {
         rc2xy(fromR) + this.padding[0],
         rc2xy(toC) + this.padding[3],
         rc2xy(toR) + this.padding[0],
-        sq * 0.15,
+        sq * 0.12,
         arrow.color
       );
     });
